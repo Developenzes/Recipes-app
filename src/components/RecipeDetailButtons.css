@@ -1,0 +1,15 @@
+.header--buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-warning {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-danger {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
