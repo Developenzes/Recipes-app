@@ -24,7 +24,6 @@ export function RecipeDetailPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  console.log(recipe);
   if (isLoading) {
     return <Spinner />;
   }
@@ -32,12 +31,13 @@ export function RecipeDetailPage() {
   if (error) {
     return <Alert color="danger">Vyskytla se chyba při načítání dat</Alert>;
   }
+  console.log(recipe);
 
   return (
     <Container>
       <div className="header--buttons">
         <h1>{recipe.title}</h1>
-        <RecipeDetailButtons slug={slug} />
+        <RecipeDetailButtons id={recipe._id}/>
       </div>
       <Row>
         <Col lg={4}>

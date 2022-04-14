@@ -6,6 +6,8 @@ export const toHoursAndMinutes = (totalMinutes) => {
     return `${minutes} min`;
   } else if (minutes === 0) {
     return `${hours} hod`;
+  } else if (!totalMinutes) {
+    return 'Neuvedené';
   }
   return `${hours} hod ${minutes} min`;
 };

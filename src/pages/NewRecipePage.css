@@ -1,0 +1,63 @@
+.header--buttons {
+  margin-bottom: 25px;
+}
+
+.prepare-time {
+  display: flex;
+  align-items: center;
+}
+
+.prepare-time span {
+  margin-left: 10px;
+  font-size: 1.1rem;
+}
+
+.btn-success {
+  width: 100%;
+}
+
+.grid--container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+  gap: 10px 0;
+}
+
+Label {
+  margin-top: 25px;
+}
+
+.basic-data Label:first-child {
+  margin-top: 0;
+}
+
+Form h4 {
+  margin: 30px 0;
+}
+
+.ingredients-list {
+  padding: 0;
+}
+
+.ingredients-list li {
+  list-style: none;
+  border: 1px solid rgb(223, 221, 221);
+  padding-left: 10px;
+  border-radius: 4px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-item p{
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.list-item p > span{
+  margin-left: 5px;
+}
