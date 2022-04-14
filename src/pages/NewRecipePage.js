@@ -1,6 +1,7 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { api } from '../api';
 import { useState } from 'react';
+import {Spinner, Alert} from "reactstrap";
 import {
   Form,
   FormGroup,
@@ -13,6 +14,10 @@ import {
 
 export function NewRecipePage() {
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+
   const [data, setData] = useState({
     title:"",
     preparationTime:"",
@@ -21,7 +26,7 @@ export function NewRecipePage() {
     directions:"",
   })
 
-  function handleRecipeData(e) {
+  const handleRecipeData = (e) => {
     const newData = {...data};
     newData[e.target.id] = e.target.value;
     setData(newData);
@@ -33,36 +38,57 @@ export function NewRecipePage() {
   const [ingredientName, setIngredientName] = useState("");
   const [amountUnit, setAmountUnit] = useState("");
   const [amount, setAmount] = useState("");
+  const [isGroup, setIsGroup] = useState(false);
+  const [groupName, setGroupName] = useState("")
 
-  function handleSubmitIngredients() {
+  const handleSubmitIngredients = () => {
 
     setIngredients([...ingredients, {
       id: ingredients.length + 1,
-      name: ingredientName,
+      name: ingredientName || groupName,
       amount: amount,
-      amountUnit: amountUnit
+      amountUnit: amountUnit,
+      isGroup: isGroup
     }]);
 
     setIngredientName("");
     setAmount("");
     setAmountUnit("");
+    setGroupName("");
+    setIsGroup(false);
   }
 
-  function handleDeleteIngredient(id) {
+  const toAddGroup = (e) => {
+    setGroupName(e.target.value);
+    setIsGroup(true);
+  }
+
+  const handleDeleteIngredient = (id) => {
     setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
   }
 
   // POST request
-  function submitNewRecipe(e) {
+  const submitNewRecipe = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     api.post("/recipes", {
       title: data.title,
       preparationTime: parseInt(data.preparationTime),
       servingCount: parseInt(data.servingCount),
       sideDish: data.sideDish,
       directions: data.directions,
-      ingredients: ingredients
-    }).then((response) => {console.log(response.data)})
+      ingredients: ingredients,
+    }).then(() => navigate('/'))
+    .catch(() => setError(true))
+    .finally(() => setIsLoading(false));
+  }
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return <Alert color="danger">Vyskytla se chyba</Alert>;
   }
 
   return (
@@ -101,17 +127,6 @@ export function NewRecipePage() {
         <Col md={4}>
           <h4>Ingrediencie</h4>
           <FormGroup>
-            <div>{ingredients.length === 0 && <p>Zatiaľ žiadne ingrediencie</p>}
-              <ul className="ingredients-list">
-                {ingredients.map(ingredient => <li key={ingredient.id}>
-                  <div className="list-item">
-                    <p>{ingredient.name}</p>
-                    <p>{ingredient.amount}<span>{ingredient.amountUnit}</span></p>
-                    <Button onClick={()=> handleDeleteIngredient(ingredient.id)}  className="btn btn-danger">X</Button>
-                  </div>
-                </li>)}
-              </ul>
-            </div>
             <Label>Pridať ingredienciu</Label>
             <div className="grid--container">
               <Input
@@ -135,22 +150,35 @@ export function NewRecipePage() {
               <Button onClick={handleSubmitIngredients} disabled={ingredientName === ""} className="btn btn-success">Pridať</Button>
             </div>
             <div>
-              <Label htmlFor="toAddGroup">Pridať skupinu</Label>
+              <Label htmlFor="isGroup">Pridať skupinu</Label>
               <div className="grid--container">
                 <Input
                   type="text"
-                  id="toAddGroup"
+                  id="isGroup"
                   placeholder="Nová skupina"
+                  value={groupName}
+                  onChange={toAddGroup}
                   />
-                <Button className="btn btn-success">Pridať</Button>
+                <Button onClick={handleSubmitIngredients} disabled={groupName === ""} className="btn btn-success">Pridať</Button>
               </div>
+            </div>
+            <div className="ingredients-container">{ingredients.length === 0 && <p className="warn-notif">Zatiaľ žiadne ingrediencie</p>}
+              <ul className="ingredients-list">
+                {ingredients.map(ingredient => <li key={ingredient.id}>
+                  <div className="list-item">
+                    <p>{ingredient.name}</p>
+                    <p>{ingredient.amount}<span>{ingredient.amountUnit}</span></p>
+                    <Button onClick={()=> handleDeleteIngredient(ingredient.id)}  className="btn btn-danger">X</Button>
+                  </div>
+                </li>)}
+              </ul>
             </div>
           </FormGroup>
         </Col>
         <Col md={5}>
           <h4>Postup</h4>
           <FormGroup>
-            <Input
+            <Input className="textarea"
               onChange={(e) => handleRecipeData(e)}
               type="textarea"
               id="directions"
