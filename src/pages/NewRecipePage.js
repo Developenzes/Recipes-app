@@ -30,7 +30,6 @@ export function NewRecipePage() {
     const newData = {...data};
     newData[e.target.id] = e.target.value;
     setData(newData);
-    console.log(newData);
   }
 
   // Ingredients
@@ -95,7 +94,7 @@ export function NewRecipePage() {
   <div>
     <Form onSubmit={(e) => submitNewRecipe(e)}>
       <div className="header--buttons">
-        <h2>Nový recept</h2>
+        <h2>{data.title === "" ? "Nový recept" : data.title}</h2>
         <ButtonGroup>
           <input className="btn btn-info" type="submit" value="Uložiť" />
           <Link className="btn btn-secondary" href="/" to={`/`}>
@@ -127,6 +126,19 @@ export function NewRecipePage() {
         <Col md={4}>
           <h4>Ingrediencie</h4>
           <FormGroup>
+            <div>
+              <Label htmlFor="isGroup">Pridať skupinu</Label>
+              <div className="grid--container">
+                <Input
+                  type="text"
+                  id="isGroup"
+                  placeholder="Nová skupina"
+                  value={groupName}
+                  onChange={toAddGroup}
+                  />
+                <Button onClick={handleSubmitIngredients} disabled={groupName === ""} className="btn btn-success">Pridať</Button>
+              </div>
+            </div>
             <Label>Pridať ingredienciu</Label>
             <div className="grid--container">
               <Input
@@ -149,19 +161,7 @@ export function NewRecipePage() {
                 />
               <Button onClick={handleSubmitIngredients} disabled={ingredientName === ""} className="btn btn-success">Pridať</Button>
             </div>
-            <div>
-              <Label htmlFor="isGroup">Pridať skupinu</Label>
-              <div className="grid--container">
-                <Input
-                  type="text"
-                  id="isGroup"
-                  placeholder="Nová skupina"
-                  value={groupName}
-                  onChange={toAddGroup}
-                  />
-                <Button onClick={handleSubmitIngredients} disabled={groupName === ""} className="btn btn-success">Pridať</Button>
-              </div>
-            </div>
+
             <div className="ingredients-container">{ingredients.length === 0 && <p className="warn-notif">Zatiaľ žiadne ingrediencie</p>}
               <ul className="ingredients-list">
                 {ingredients.map(ingredient => <li key={ingredient.id}>
