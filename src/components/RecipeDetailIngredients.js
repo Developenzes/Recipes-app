@@ -1,6 +1,8 @@
 import { Table, Input } from 'reactstrap';
 import './RecipeDetailIngredients.css';
 
+
+
 export default function RecipeDetailIngredients({ ingredients, servingCount }) {
   return (
     <div>

@@ -12,22 +12,13 @@ import {
   ButtonGroup, Button} from "reactstrap";
   import "./NewRecipePage.css"
 
-  const initialValues = {
-    title: "",
-    preparationTime: "",
-    servingCount: "",
-    sideDish: "",
-    directions: "",
-    ingredients: []
-  }
-
 export function NewRecipePage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-  const [values, setValues] = useState(initialValues);
+  const [recipe, setRecipe] = useState({});
 
   // Ingredients
   const [ingredients, setIngredients] = useState([]);
@@ -37,14 +28,10 @@ export function NewRecipePage() {
   const [isGroup, setIsGroup] = useState(false);
   const [groupName, setGroupName] = useState("")
 
-
-  const handleInputChange = (e) => {
-    const {name, value} = e.target;
-
-    setValues({
-      ...values,
-      [name]: value,
-    });
+  const handleRecipeData = (e) => {
+    const newRecipe = {...recipe};
+    newRecipe[e.target.id] = e.target.value;
+    setRecipe(newRecipe);
   }
 
   const handleSubmitIngredients = () => {
@@ -78,11 +65,11 @@ export function NewRecipePage() {
     e.preventDefault();
     setIsLoading(true);
     api.post("/recipes", {
-      title: values.title[0].toUpperCase() + values.title.substring(1),
-      preparationTime: parseInt(values.preparationTime),
-      servingCount: parseInt(values.servingCount),
-      sideDish: values.sideDish,
-      directions: values.directions,
+      title: recipe.title[0].toUpperCase() + recipe.title.substring(1),
+      preparationTime: parseInt(recipe.preparationTime),
+      servingCount: parseInt(recipe.servingCount),
+      sideDish: recipe.sideDish,
+      directions: recipe.directions,
       ingredients: ingredients
     }).then(() => navigate('/'))
     .catch(() => setError(true))
@@ -101,7 +88,7 @@ export function NewRecipePage() {
     <div>
       <Form onSubmit={(e) => submitNewRecipe(e)}>
         <div className="header--buttons">
-          <h2>{!values.title ? "Nový recept" : values.title}</h2>
+          <h2>{!recipe.title ? "Nový recept" : recipe.title}</h2>
           <ButtonGroup>
             <input className="btn btn-info" type="submit" value="Uložiť" />
             <Link className="btn btn-secondary" href="/" to={`/`}>
@@ -109,7 +96,7 @@ export function NewRecipePage() {
             </Link>
           </ButtonGroup>
         </div>
-        <Input onChange={handleInputChange} name="title" id="title" defaultValue={values.title} type="text" placeholder="Názov" label="Title" />
+        <Input onChange={(e) => handleRecipeData(e)} id="title" defaultValue={recipe.title} type="text" placeholder="Názov" />
         <Row>
           <Col md={3}>
             <h4>Základné údaje</h4>
@@ -117,19 +104,17 @@ export function NewRecipePage() {
               <Label htmlFor="preparationTime">Doba prípravy</Label>
               <div className="prepare-time" >
                 <Input
-                    onChange={handleInputChange}
-                    defaultValue={values.preparationTime}
-                    name="preparationTime"
-                    label="PreparationTime"
+                    onChange={(e) => handleRecipeData(e)}
+                    defaultValue={recipe.preparationTime}
                     type="number"
                     id="preparationTime"
                   />
                 <span>min</span>
               </div>
               <Label htmlFor="servingCount">Počet porcií</Label>
-              <Input onChange={handleInputChange} id="servingCount" type="number" min="1" defaultValue={values.servingCount} name="servingCount" label="ServingCount" />
+              <Input onChange={(e) => handleRecipeData(e)} id="servingCount" type="number" min="1" defaultValue={recipe.servingCount} />
               <Label htmlFor="sideDish">Príloha</Label>
-              <Input onChange={handleInputChange} id="sideDish" type="text" name="sideDish" defaultValue={values.sideDish} label="SideDish"/>
+              <Input onChange={(e) => handleRecipeData(e)} id="sideDish" type="text" name="sideDish" defaultValue={recipe.sideDish}/>
             </FormGroup>
           </Col>
           <Col md={4}>
@@ -187,13 +172,12 @@ export function NewRecipePage() {
             <h4>Postup</h4>
             <FormGroup>
               <Input className="textarea"
-                onChange={handleInputChange}
+                onChange={(e) => handleRecipeData(e)}
                 type="textarea"
                 id="directions"
                 name="directions"
-                label="Directions"
                 rows="20"
-                defaultValue={values.directions}
+                value={recipe.directions}
               />
             </FormGroup>
           </Col>
