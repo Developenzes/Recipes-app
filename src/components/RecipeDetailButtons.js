@@ -5,7 +5,7 @@ import { ButtonGroup, Button, Spinner, Alert } from 'reactstrap';
 import './RecipeDetailButtons.css';
 import { api } from '../api';
 
-export default function RecipeDetailButtons({ id }) {
+export default function RecipeDetailButtons({ id, slug}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const navigate = useNavigate()
@@ -30,7 +30,7 @@ export default function RecipeDetailButtons({ id }) {
 
   return (
     <ButtonGroup>
-      <Link className="btn btn-warning" href="/" to={`/recipe/${id}/update`}>
+      <Link className="btn btn-warning" href="/" to={`/recipe/${slug}/update`}>
         Upraviť
       </Link>
       <Button onClick={handleDeleteRecipe} color="danger">

@@ -15,7 +15,6 @@ export function RecipeListPage() {
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
-  //const [isNewRecipe, setIsNewRecipe] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -27,20 +26,19 @@ export function RecipeListPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  console.log(recipes);
-
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.title.toLowerCase().includes(searchValue.toLowerCase()),
   );
-
 
   return (
     <Container>
       <div className="header--container">
         <h1>Recepty</h1>
-        <Link href="/" to={`/recipe/new-recipe`} className="btn btn-info">
-          Nový recept
-        </Link>
+        <div>
+          <Link href="/" to={`/recipe/new-recipe`} className="btn btn-info">
+            Nový recept
+          </Link>
+        </div>
       </div>
       <SearchInput
         className="mb-4"

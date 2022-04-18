@@ -11,3 +11,6 @@ export const toHoursAndMinutes = (totalMinutes) => {
   }
   return `${hours} hod ${minutes} min`;
 };
+
+
+

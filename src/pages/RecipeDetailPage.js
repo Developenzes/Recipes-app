@@ -37,7 +37,7 @@ export function RecipeDetailPage() {
     <Container>
       <div className="header--buttons">
         <h1>{recipe.title}</h1>
-        <RecipeDetailButtons id={recipe._id}/>
+        <RecipeDetailButtons id={recipe._id} slug={slug}/>
       </div>
       <Row>
         <Col lg={4}>
@@ -54,7 +54,12 @@ export function RecipeDetailPage() {
           />
         </Col>
         <Col lg={8}>
-          <p>{recipe.directions}</p>
+          {recipe.directions}
+
+        {/* <ol>
+          {recipe.directions?.split("1.").slice(1).map((direction, index) => (
+            <li className="recipe-direction" key={index}>{direction}</li>
+          ))}</ol> */}
         </Col>
       </Row>
     </Container>
