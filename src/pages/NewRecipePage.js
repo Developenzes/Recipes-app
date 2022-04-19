@@ -10,7 +10,8 @@ import {
   Label,
   Input,
   ButtonGroup, Button} from "reactstrap";
-  import "./NewRecipePage.css"
+  import "./NewRecipePage.css";
+  import { nanoid } from 'nanoid';
 
   const initialValues = {
     title: "",
@@ -30,7 +31,6 @@ export function NewRecipePage() {
   const [values, setValues] = useState(initialValues);
 
   // Ingredients
-  const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
   const [amountUnit, setAmountUnit] = useState("");
   const [amount, setAmount] = useState("");
@@ -49,13 +49,15 @@ export function NewRecipePage() {
 
   const handleSubmitIngredients = () => {
 
-    setIngredients([...ingredients, {
-      id: ingredients.length + 1,
+    const ingredients = [...values.ingredients, {
+      tempId: nanoid(),
       name: ingredientName || groupName,
       amount: amount,
       amountUnit: amountUnit,
       isGroup: isGroup
-    }]);
+    }];
+
+    setValues({ ...values, ingredients });
 
     setIngredientName("");
     setAmount("");
@@ -70,21 +72,19 @@ export function NewRecipePage() {
   }
 
   const handleDeleteIngredient = (id) => {
-    setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
+    setValues({ ...values, ingredients: values.ingredients.filter(ingredient => ingredient._id !== id) });
   }
 
   // POST request
   const submitNewRecipe = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log(values);
     api.post("/recipes", {
-      title: values.title[0].toUpperCase() + values.title.substring(1),
-      preparationTime: parseInt(values.preparationTime),
-      servingCount: parseInt(values.servingCount),
-      sideDish: values.sideDish,
-      directions: values.directions,
-      ingredients: ingredients
-    }).then(() => navigate('/'))
+      ...values,
+      title: values.title[0].toUpperCase() + values.title.substring(1)
+    })
+    .then(() => navigate('/'))
     .catch(() => setError(true))
     .finally(() => setIsLoading(false));
   }
@@ -170,13 +170,13 @@ export function NewRecipePage() {
                   />
                 <Button onClick={handleSubmitIngredients} disabled={ingredientName === ""} className="btn btn-success">Pridať</Button>
               </div>
-              <div className="ingredients-container">{ingredients.length === 0 && <p className="warn-notif">Zatiaľ žiadne ingrediencie</p>}
+              <div className="ingredients-container">{values.ingredients.length === 0 && <p className="warn-notif">Zatiaľ žiadne ingrediencie</p>}
                 <ul className="ingredients-list">
-                  {ingredients.map(ingredient => <li key={ingredient.id}>
+                  {values.ingredients.map(ingredient => <li key={ingredient._id || ingredient.tempId}>
                     <div className="list-item">
                       <p>{ingredient.name}</p>
                       <p>{ingredient.amount}<span>{ingredient.amountUnit}</span></p>
-                      <Button onClick={()=> handleDeleteIngredient(ingredient.id)}  className="btn btn-danger">X</Button>
+                      <Button onClick={()=> handleDeleteIngredient(ingredient._id)}  className="btn btn-danger">X</Button>
                     </div>
                   </li>)}
                 </ul>

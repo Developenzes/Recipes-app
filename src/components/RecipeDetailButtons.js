@@ -30,7 +30,7 @@ export default function RecipeDetailButtons({ id, slug}) {
 
   return (
     <ButtonGroup>
-      <Link className="btn btn-warning" href="/" to={`/recipe/${slug}/update`}>
+      <Link id={id} className="btn btn-warning" href="/" to={`/recipe/${slug}/update`}>
         Upraviť
       </Link>
       <Button onClick={handleDeleteRecipe} color="danger">
