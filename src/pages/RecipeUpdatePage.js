@@ -11,7 +11,10 @@ import {
   Label,
   Input,
   ButtonGroup, Button} from "reactstrap";
+<<<<<<< HEAD
 import { nanoid } from 'nanoid';
+=======
+>>>>>>> e89b8909d635684d2a77f9c892beb31f107076a0
 
   const initialValues = {
     title: "",
@@ -26,12 +29,17 @@ import { nanoid } from 'nanoid';
 export function RecipeUpdatePage() {
 
   const { slug } = useParams();
+<<<<<<< HEAD
+=======
+  //const [recipe, setRecipe] = useState({});
+>>>>>>> e89b8909d635684d2a77f9c892beb31f107076a0
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const navigate = useNavigate();
 
   const [values, setValues] = useState(initialValues);
 
+<<<<<<< HEAD
   // Ingredients
   const [ingredientName, setIngredientName] = useState("");
   const [amountUnit, setAmountUnit] = useState("");
@@ -39,17 +47,35 @@ export function RecipeUpdatePage() {
   const [isGroup, setIsGroup] = useState(false);
   const [groupName, setGroupName] = useState("")
 
+=======
+>>>>>>> e89b8909d635684d2a77f9c892beb31f107076a0
   useEffect(() => {
     setIsLoading(true);
 
     api
       .get(`/recipes/${slug}`)
+<<<<<<< HEAD
       .then((response) => { setValues(response.data); })
+=======
+      .then((response) => setValues(response.data))
+>>>>>>> e89b8909d635684d2a77f9c892beb31f107076a0
       .catch((error) => setError(error))
       .finally(() => setIsLoading(false));
   }, [slug]);
 
 
+<<<<<<< HEAD
+=======
+  // Ingredients
+  const [ingredients, setIngredients] = useState([]);
+  const [ingredientName, setIngredientName] = useState("");
+  const [amountUnit, setAmountUnit] = useState("");
+  const [amount, setAmount] = useState("");
+  const [isGroup, setIsGroup] = useState(false);
+  const [groupName, setGroupName] = useState("")
+
+
+>>>>>>> e89b8909d635684d2a77f9c892beb31f107076a0
   const handleInputChange = (e) => {
     const {name, value} = e.target;
 
@@ -58,6 +84,7 @@ export function RecipeUpdatePage() {
       [name]: value,
     });
   }
+<<<<<<< HEAD
 
   const handleSubmitIngredients = () => {
 
@@ -108,6 +135,59 @@ export function RecipeUpdatePage() {
     return <Alert color="danger">Vyskytla se chyba</Alert>;
   }
 
+=======
+
+  const handleSubmitIngredients = () => {
+
+    setIngredients([...ingredients, {
+      id: ingredients.length + 1,
+      name: ingredientName || groupName,
+      amount: amount,
+      amountUnit: amountUnit,
+      isGroup: isGroup
+    }]);
+
+    setIngredientName("");
+    setAmount("");
+    setAmountUnit("");
+    setGroupName("");
+    setIsGroup(false);
+  }
+
+  const toAddGroup = (e) => {
+    setGroupName(e.target.value);
+    setIsGroup(true);
+  }
+
+  const handleDeleteIngredient = (id) => {
+    setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
+  }
+
+  // POST request
+  const submitNewRecipe = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    api.post("/recipes", {
+      title: values.title[0].toUpperCase() + values.title.substring(1),
+      preparationTime: parseInt(values.preparationTime),
+      servingCount: parseInt(values.servingCount),
+      sideDish: values.sideDish,
+      directions: values.directions,
+      ingredients: ingredients
+    }).then(() => navigate('/'))
+    .catch(() => setError(true))
+    .finally(() => setIsLoading(false));
+  }
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return <Alert color="danger">Vyskytla se chyba</Alert>;
+  }
+
+>>>>>>> e89b8909d635684d2a77f9c892beb31f107076a0
   return (
     <div>
       <Form onSubmit={(e) => submitNewRecipe(e)}>
@@ -181,6 +261,7 @@ export function RecipeUpdatePage() {
                   />
                 <Button onClick={handleSubmitIngredients} disabled={ingredientName === ""} className="btn btn-success">Pridať</Button>
               </div>
+<<<<<<< HEAD
               <div className="ingredients-container">{values.ingredients.length === 0 && <p className="warn-notif">Zatiaľ žiadne ingrediencie</p>}
                 <ul className="ingredients-list">
                   {values.ingredients.map(ingredient => <li key={ingredient._id || ingredient.tempId}>
@@ -188,6 +269,15 @@ export function RecipeUpdatePage() {
                       <p>{ingredient.name}</p>
                       <p>{ingredient.amount}<span>{ingredient.amountUnit}</span></p>
                       <Button onClick={()=> handleDeleteIngredient(ingredient._id)}  className="btn btn-danger">X</Button>
+=======
+              <div className="ingredients-container">{ingredients.length === 0 && <p className="warn-notif">Zatiaľ žiadne ingrediencie</p>}
+                <ul className="ingredients-list">
+                  {ingredients.map(ingredient => <li key={ingredient.id}>
+                    <div className="list-item">
+                      <p>{ingredient.name}</p>
+                      <p>{ingredient.amount}<span>{ingredient.amountUnit}</span></p>
+                      <Button onClick={()=> handleDeleteIngredient(ingredient.id)}  className="btn btn-danger">X</Button>
+>>>>>>> e89b8909d635684d2a77f9c892beb31f107076a0
                     </div>
                   </li>)}
                 </ul>
@@ -213,3 +303,4 @@ export function RecipeUpdatePage() {
     </div>
   );
 }
+
