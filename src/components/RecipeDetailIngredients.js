@@ -14,7 +14,7 @@ export default function RecipeDetailIngredients({ ingredients, servingCount }) {
         <tbody>
           {ingredients?.map((ingredient) =>
             ingredient.isGroup ? (
-              <tr className="text-center">
+              <tr key={ingredient._id} className="text-center">
                 <td colSpan={3} className="table-primary">
                   <span className="highlighted">{ingredient.name}</span>
                 </td>

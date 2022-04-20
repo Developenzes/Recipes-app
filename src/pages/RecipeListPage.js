@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import './RecipeListPage.css';
 
+
 export function RecipeListPage() {
   const [recipes, setRecipes] = useState([]);
   const [searchValue, setSearchValue] = useState('');

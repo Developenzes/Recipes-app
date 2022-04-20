@@ -9,10 +9,11 @@ import {
   Col,
   Label,
   Input,
-  ButtonGroup, Button} from "reactstrap";
-  import "./NewRecipePage.css";
+  ButtonGroup, Button, FormFeedback} from "reactstrap";
   import { nanoid } from 'nanoid';
   import ReactMarkdown from "react-markdown";
+  import { useSnackbar } from 'react-simple-snackbar';
+  import "./NewRecipePage.css";
 
   const initialValues = {
     title: "",
@@ -28,16 +29,14 @@ export function NewRecipePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const navigate = useNavigate();
+  const [openSnackbar, closeSnackbar] = useSnackbar();
 
   const [values, setValues] = useState(initialValues);
-
-  // Ingredients
   const [ingredientName, setIngredientName] = useState("");
   const [amountUnit, setAmountUnit] = useState("");
   const [amount, setAmount] = useState("");
   const [isGroup, setIsGroup] = useState(false);
-  const [groupName, setGroupName] = useState("")
-
+  const [groupName, setGroupName] = useState("");
 
   const handleInputChange = (e) => {
     const {name, value} = e.target;
@@ -80,13 +79,18 @@ export function NewRecipePage() {
   const submitNewRecipe = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(values);
     api.post("/recipes", {
       ...values,
       title: values.title[0].toUpperCase() + values.title.substring(1)
     })
-    .then(() => navigate('/'))
-    .catch(() => setError(true))
+    .then(() => {
+      openSnackbar("Recept úspešne uložený", [3000]);
+      navigate("/");
+    })
+    .catch(() => {
+      openSnackbar("Niečo sa posr...");
+      setError(true);
+    })
     .finally(() => setIsLoading(false));
   }
 
@@ -104,13 +108,14 @@ export function NewRecipePage() {
         <div className="header--buttons">
           <h2>{!values.title ? "Nový recept" : values.title}</h2>
           <ButtonGroup>
-            <input className="btn btn-info" type="submit" value="Uložiť" />
+            <input disabled={!values.title} className="btn btn-info" type="submit" value="Uložiť" />
             <Link className="btn btn-secondary" href="/" to={`/`}>
               Zrušiť
             </Link>
           </ButtonGroup>
         </div>
-        <Input onChange={handleInputChange} name="title" id="title" defaultValue={values.title} type="text" placeholder="Názov" label="Title" />
+        <Input invalid={!values.title} onChange={handleInputChange} name="title" id="title" defaultValue={values.title} type="text" placeholder="Názov" label="Title" />
+        <FormFeedback >Názov receptu je povinný</FormFeedback>
         <Row>
           <Col md={3}>
             <h4>Základné údaje</h4>

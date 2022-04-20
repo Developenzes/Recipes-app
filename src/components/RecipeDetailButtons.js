@@ -1,22 +1,28 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ButtonGroup, Button, Spinner, Alert } from 'reactstrap';
-
-import './RecipeDetailButtons.css';
 import { api } from '../api';
+import { useSnackbar } from 'react-simple-snackbar';
+import './RecipeDetailButtons.css';
 
 export default function RecipeDetailButtons({ id, slug}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [openSnackbar, closeSnackbar] = useSnackbar();
   const navigate = useNavigate()
 
   const handleDeleteRecipe = () => {
-
     setIsLoading(true);
     api
       .delete(`/recipes/${id}`)
-      .then(() => navigate('/'))
-      .catch(() => setError(true))
+      .then(() => {
+        openSnackbar("Recept vymazaný", [3000]);
+        navigate('/')
+      })
+      .catch(() => {
+        openSnackbar("Niečo sa posr...");
+        setError(true)
+      })
       .finally(() => setIsLoading(false));
   };
 
