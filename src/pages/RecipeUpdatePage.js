@@ -69,7 +69,7 @@ export function RecipeUpdatePage() {
       amountUnit: amountUnit,
       isGroup: isGroup
     }];
-    console.log(ingredients);
+
     setValues({ ...values, ingredients });
 
     setIngredientName("");
@@ -92,6 +92,7 @@ export function RecipeUpdatePage() {
   // POST request
   const submitNewRecipe = (e) => {
     e.preventDefault();
+    closeSnackbar();
     setIsLoading(true);
     console.log(values);
     api.post(`/recipes/${values._id}`, {
@@ -222,7 +223,7 @@ export function RecipeUpdatePage() {
         </Row>
       </Form>
       <div className="markdown-container">
-        <h3>Náhľad</h3>
+        <h3>Náhľad postupu</h3>
         <ReactMarkdown>{values.directions}</ReactMarkdown>
       </div>
     </div>

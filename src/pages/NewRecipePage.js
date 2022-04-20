@@ -9,7 +9,9 @@ import {
   Col,
   Label,
   Input,
-  ButtonGroup, Button, FormFeedback} from "reactstrap";
+  ButtonGroup,
+  Button,
+  FormFeedback} from "reactstrap";
   import { nanoid } from 'nanoid';
   import ReactMarkdown from "react-markdown";
   import { useSnackbar } from 'react-simple-snackbar';
@@ -78,6 +80,7 @@ export function NewRecipePage() {
   // POST request
   const submitNewRecipe = (e) => {
     e.preventDefault();
+    closeSnackbar();
     setIsLoading(true);
     api.post("/recipes", {
       ...values,
@@ -206,7 +209,7 @@ export function NewRecipePage() {
         </Row>
       </Form>
       <div className="markdown-container">
-        <h3>Náhľad</h3>
+        <h3>Náhľad postupu</h3>
         <ReactMarkdown>{values.directions}</ReactMarkdown>
       </div>
     </div>
