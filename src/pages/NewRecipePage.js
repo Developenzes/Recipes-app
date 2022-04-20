@@ -12,6 +12,7 @@ import {
   ButtonGroup, Button} from "reactstrap";
   import "./NewRecipePage.css";
   import { nanoid } from 'nanoid';
+  import ReactMarkdown from "react-markdown";
 
   const initialValues = {
     title: "",
@@ -72,7 +73,7 @@ export function NewRecipePage() {
   }
 
   const handleDeleteIngredient = (id) => {
-    setValues({ ...values, ingredients: values.ingredients.filter(ingredient => ingredient._id !== id) });
+    setValues({ ...values, ingredients: values.ingredients.filter(ingredient => (ingredient._id || ingredient.tempId) !== id) });
   }
 
   // POST request
@@ -176,7 +177,7 @@ export function NewRecipePage() {
                     <div className="list-item">
                       <p>{ingredient.name}</p>
                       <p>{ingredient.amount}<span>{ingredient.amountUnit}</span></p>
-                      <Button onClick={()=> handleDeleteIngredient(ingredient._id)}  className="btn btn-danger">X</Button>
+                      <Button onClick={()=> handleDeleteIngredient(ingredient._id || ingredient.tempId)}  className="btn btn-danger">X</Button>
                     </div>
                   </li>)}
                 </ul>
@@ -199,6 +200,10 @@ export function NewRecipePage() {
           </Col>
         </Row>
       </Form>
+      <div className="markdown-container">
+        <h3>Náhľad</h3>
+        <ReactMarkdown>{values.directions}</ReactMarkdown>
+      </div>
     </div>
   );
 }

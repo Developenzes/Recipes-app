@@ -6,6 +6,7 @@ import RecipeDetailIngredients from '../components/RecipeDetailIngredients';
 import RecipeDetailButtons from '../components/RecipeDetailButtons';
 import { toHoursAndMinutes } from '../helpers';
 import { FaRegClock } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown'
 import './RecipeDetailPage.css';
 
 export function RecipeDetailPage() {
@@ -31,7 +32,6 @@ export function RecipeDetailPage() {
   if (error) {
     return <Alert color="danger">Vyskytla se chyba při načítání dat</Alert>;
   }
-  console.log(recipe);
 
   return (
     <Container>
@@ -53,13 +53,8 @@ export function RecipeDetailPage() {
             servingCount={recipe.servingCount}
           />
         </Col>
-        <Col lg={8}>
-          {recipe.directions}
-
-        {/* <ol>
-          {recipe.directions?.split("1.").slice(1).map((direction, index) => (
-            <li className="recipe-direction" key={index}>{direction}</li>
-          ))}</ol> */}
+        <Col lg={8} className="markdown-container">
+          <ReactMarkdown>{recipe.directions}</ReactMarkdown>
         </Col>
       </Row>
     </Container>

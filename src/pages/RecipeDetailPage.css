@@ -14,4 +14,18 @@
   margin-right: 10px;
 }
 
+.markdown-container {
+  padding-top: 4rem;
+}
+
+.markdown-container li {
+  margin-bottom: 5px;
+}
+
+.markdown-container li::marker {
+  color: #5b8cd5;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
 
