@@ -88,7 +88,7 @@ export function NewRecipePage() {
       navigate("/");
     })
     .catch(() => {
-      openSnackbar("Niečo sa posr...");
+      openSnackbar("Niečo sa posr...", [3000]);
       setError(true);
     })
     .finally(() => setIsLoading(false));

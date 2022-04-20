@@ -102,10 +102,12 @@ export function RecipeUpdatePage() {
       navigate('/');
     })
     .catch(() => {
-      openSnackbar("Niečo sa posr...");
+      openSnackbar("Niečo sa posr...", [3000]);
       setError(true);
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => {
+      setIsLoading(false)
+    });
   }
 
   if (isLoading) {

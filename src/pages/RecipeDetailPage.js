@@ -25,6 +25,7 @@ export function RecipeDetailPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
+
   if (isLoading) {
     return <Spinner />;
   }
