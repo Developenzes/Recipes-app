@@ -18,7 +18,14 @@ export default function RecipeDetailIngredients({ ingredients, servingCount }) {
         <tbody>
           {ingredients?.map((ingredient) => {
 
-          const oneServingCount = ingredient.amount / servingCount
+          const oneServingCount = ingredient.amount / servingCount;
+          const ingredientsCount = () => {
+            if(!servingCount) {             
+              return ingredient.amount                            
+            } else {
+              return oneServingCount * newServingCount
+            }
+          }
 
           return (
             ingredient.isGroup ? (
@@ -29,7 +36,7 @@ export default function RecipeDetailIngredients({ ingredients, servingCount }) {
               </tr>
             ) : (
               <tr key={ingredient._id}>
-                <td className="text-alighn-right">{!ingredient.amount ? "" : (oneServingCount * newServingCount)}</td>
+                <td className="text-alighn-right">{!ingredient.amount ? "" : ingredientsCount()}</td>
                 <td>{ingredient.amountUnit}</td>
                 <td>{ingredient.name}</td>
               </tr>
